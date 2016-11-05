@@ -7,6 +7,8 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var methodOverride = require("method-override");
+var moment = require("moment");
+
 mongoose.connect("mongodb://localhost/zanecamp");
 
 var campSchema = new mongoose.Schema({
@@ -23,9 +25,13 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 
-
 app.get("/camps", function (req, res) {
     Camp.find({}, function (err, camps) {
+
+        camps.forEach(function (camp) {
+            camp.fromnow = moment(camp.created).fromNow();
+        });
+
         if (err) {
             console.log("DB find Error!");
         } else {
