@@ -27,11 +27,6 @@ app.use(methodOverride("_method"));
 
 app.get("/camps", function (req, res) {
     Camp.find({}, function (err, camps) {
-
-        camps.forEach(function (camp) {
-            camp.fromnow = moment(camp.created).fromNow();
-        });
-
         if (err) {
             console.log("DB find Error!");
         } else {
@@ -91,10 +86,10 @@ app.put("/camps/:id", function (req, res) {
 
 app.delete("/camps/:id", function (req, res) {
     var id = req.params.id;
-    Camp.findByIdAndRemove(id,function (err) {
-        if (err){
+    Camp.findByIdAndRemove(id, function (err) {
+        if (err) {
             res.send("can not delete camp");
-        }else{
+        } else {
             res.redirect("/camps");
         }
     })
