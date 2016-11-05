@@ -15,7 +15,7 @@ var campSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
-    created: {type: Date, default: Date.now()}
+    created: {type: Date, default: Date.now}
 });
 
 var Camp = mongoose.model("Camp", campSchema);
