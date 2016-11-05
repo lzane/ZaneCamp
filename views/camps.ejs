@@ -1,0 +1,35 @@
+<% include header %>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-4">Welcome to ZaneCamp</h1>
+            <p class="lead">create your own camp</p>
+            <hr class="my-2">
+            <a class="btn btn-primary btn-lg" href="/camps/new" role="button">Create Camp</a>
+        </div>
+    </div>
+
+    <div class="row" style="display: flex;flex-wrap: wrap;">
+        <% data.forEach(function (camp) { %>
+        <div class="col-lg-4 col-md-6 card-container">
+            <div class="card">
+                <a class="camps-index-title" href="/camps/<%= camp._id %>">
+                    <img class="card-img-top" src="<%= camp.image %>" style="width: 100%;">
+                </a>
+                <div class="card-block">
+                    <a class="camps-index-title" href="/camps/<%= camp._id %>">
+                        <h4 class="card-title text-xs-center"><%= camp.name %></h4>
+                    </a>
+                    <p class="card-text"><%= camp.description.substring(0, 100) %>...</p>
+                    <div class="card-text text-xs-right">
+                        <small class="text-muted"><%= camp.created.toDateString()%></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+<% include footer %>

@@ -1,0 +1,23 @@
+<% include header.ejs %>
+
+<div class="container">
+    <div class="card camp-detail-card">
+        <img class="card-img-top camp-detail-img" src="<%= camp.image %>">
+        <div class="card-block">
+            <h4 class="card-title"> <%= camp.name %></h4>
+            <p class="card-text"> <%= camp.description %></p>
+            <p class="card-text">
+                <small class="text-muted"><%= camp.created.toDateString() %></small>
+            </p>
+
+            <div class="float-xs-right camp-detail-updateRemove" >
+                <a class="btn btn-primary btn-md" role="button" href="/camps/<%= camp._id %>/edit">Edit</a>
+                <form class="d-inline" action="/camps/<%= camp._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger btn-md" role="button" type="submit">Remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include footer.ejs %>
