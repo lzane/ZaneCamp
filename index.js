@@ -29,6 +29,9 @@ app.get("/camps", function (req, res) {
         if (err) {
             console.log("DB find Error!");
         } else {
+            camps.forEach(function(camp){
+                camp.timeFromNow = moment(camp.created).fromNow();
+            });
             res.render("camps/camps", {data: camps});
         }
     });
