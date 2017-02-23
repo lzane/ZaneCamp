@@ -19,7 +19,13 @@ route.get("/camps", function (req, res) {
 });
 
 route.post("/camps", function (req, res) {
-    Camp.create(req.body.camp, function (err) {
+    var tempcamp = req.body.camp;
+    tempcamp.author = {
+        name: req.user.username,
+        id: req.user.id
+    };
+    
+    Camp.create(tempcamp, function (err) {
         if (err) {
             console.log("DB insert Error!");
         } else {
@@ -27,7 +33,6 @@ route.post("/camps", function (req, res) {
         }
     });
 });
-
 
 
 route.get("/camps/new", function (req, res) {
