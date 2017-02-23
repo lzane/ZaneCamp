@@ -47,6 +47,7 @@ seed();
 
 //requiring routes
 app.use(require("./routes/camps"));
+app.use(require("./routes/comment"));
 app.use(require("./routes/user"));
 
 app.listen(3000, function (req, res) {

@@ -36,9 +36,6 @@
                 <div class="comment-container">
                     <form action="/camps/<%= camp.id %>" method="post">
                         <h4 id="leave-a-comment-label">Leave a comment</h4>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="comment[name]" placeholder="Your name">
-                        </div>
 
                         <div class="form-group">
                             <textarea class="form-control" name="comment[content]" rows="3"
@@ -53,7 +50,7 @@
                             <% camp.comments.forEach(function (comment) { %>
                             <div class="comment">
                                 <div class="comment-name">
-                                    <b><%= comment.name %></b>
+                                    <b><%= comment.author.name %></b>
                                 </div>
                                 <div class="comment-content">
                                     <%= comment.content %>
