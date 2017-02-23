@@ -10,6 +10,10 @@ var express = require("express"),
     moment = require("moment"),
     Camp = require(MODEL_PATH + "campModel.js"),
     Comment = require(MODEL_PATH + "commentModel.js"),
+    User = require(MODEL_PATH + "userModel.js"),
+    passport = require("passport"),
+    session = require("express-session"),
+    localStrategy = require("passport-local"),
     mongoose = require("mongoose"),
     seed = require("./seed");
 
@@ -20,16 +24,32 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.use(session({
+    secret: "hello world",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function (req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
+});
+app.use('/camps',isLogin);
+
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 seed();
-
 // Routes
 app.get("/camps", function (req, res) {
     Camp.find({}, function (err, camps) {
         if (err) {
             console.log("DB find Error!");
         } else {
-            camps.forEach(function(camp){
+            camps.forEach(function (camp) {
                 camp.timeFromNow = moment(camp.created).fromNow();
             });
             res.render("camps/camps", {data: camps});
@@ -46,6 +66,14 @@ app.post("/camps", function (req, res) {
         }
     });
 });
+
+
+function isLogin(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 
 app.get("/camps/new", function (req, res) {
@@ -126,6 +154,53 @@ app.delete("/camps/:id", function (req, res) {
             res.redirect("/camps");
         }
     })
+});
+
+
+//================
+// User register login logout
+//================
+app.get("/register", function (req, res) {
+    res.render("user/register");
+});
+
+
+app.post("/register", function (req, res) {
+    User.register(new User({username: req.body.username}), req.body.password, function (err, user) {
+        if (err) {
+            return res.render('user/register', {errorMessage: err.message});
+        }
+        passport.authenticate("local")(req, res, function () {
+            res.redirect("/camps");
+        })
+    });
+});
+
+app.get("/login", function (req, res) {
+    res.render("user/login");
+});
+
+
+app.post("/login", function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err)
+        }
+        if (!user) {
+            return res.render("user/login", {loginErrorMessage: info.message})
+        }
+        req.login(user, function (err) {
+            if (err) {
+                console.log(err);
+            }
+            return res.redirect("/camps");
+        });
+    })(req, res, next);
+});
+
+app.get("/logout", function (req, res) {
+    req.logout();
+    res.redirect("/camps")
 });
 
 app.get("*", function (req, res) {

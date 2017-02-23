@@ -18,12 +18,27 @@
         </div>
 
         <ul class="nav navbar-nav float-xs-right">
+            <!--<li class="nav-item">-->
+            <!--<a href="/about">About</a>-->
+            <!--</li>-->
+
+            <% if (locals.currentUser) { %>
             <li class="nav-item">
-                <a href="/about">About</a>
+                <a href="/logout">LogOut</a>
             </li>
             <li class="nav-item">
                 <a href="/camps/new">Create Camp</a>
             </li>
+            <% }else{ %>
+            <li class="nav-item">
+                <a href="/login">Login</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/register">Register</a>
+            </li>
+            <% } %>
+
         </ul>
 
     </div>

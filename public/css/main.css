@@ -63,3 +63,11 @@
 #leave-a-comment-label{
     margin-bottom: 10px;
 }
+
+.nav-item{
+    padding: 7px;
+}
+
+.navbar-nav .nav-item + .nav-item{
+    margin-left: 0;
+}

@@ -24,7 +24,7 @@
                     </a>
                     <p class="card-text"><%= camp.description.substring(0, 100) %>...</p>
                     <div class="card-text text-xs-right">
-                        <small class="text-muted" TimeFromNow="<%= camp.created.getTime() %>"></small>
+                        <small class="text-muted"><%= camp.timeFromNow %></small>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,5 @@
         <% }) %>
     </div>
 </div>
-
-<script rel="script" src="/js/campsIndex.js"></script>
 
 <% include ../partials/footer %>

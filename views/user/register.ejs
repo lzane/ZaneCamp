@@ -1,0 +1,27 @@
+<% include ../partials/header.ejs%>
+
+<form class="form-contrainer" method="post" action="/register">
+    <h1 class="text-xs-center">Register</h1>
+    <div class="form-group row">
+        <label class="col-xs-12 col-form-label">Username:</label>
+        <div class="col-xs-12">
+            <input class="form-control" type="text" name="username">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-xs-12 col-form-label">Password:</label>
+
+        <div class="col-xs-12">
+            <input class="form-control" type="text" name="password">
+        </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up</button>
+</form>
+
+<% if(locals.errorMessage){ %>
+<div class="text-warning text-sm-center"><%= errorMessage%></div>
+<% } %>
+
+<% include ../partials/footer.ejs%>
