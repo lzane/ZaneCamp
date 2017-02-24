@@ -15,7 +15,7 @@ var express = require("express"),
     session = require("express-session"),
     localStrategy = require("passport-local"),
     mongoose = require("mongoose"),
-    seed = require("./seed"),
+    // seed = require("./seed"),
     common = require("./common");
 
 mongoose.Promise = global.Promise;
@@ -37,13 +37,14 @@ app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
     next();
 });
-app.use('/camps',common.isLogin);
+
+// app.use('/camps',common.isLogin);
 
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-seed();
+// seed();
 
 //requiring routes
 app.use(require("./routes/camps"));

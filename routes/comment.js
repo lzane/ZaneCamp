@@ -4,7 +4,7 @@ var route = express.Router(),
     Comment = require('../models/commentModel'),
     common = require('../common');
 
-route.post("/camps/:id", function (req, res) {
+route.post("/camps/:id",common.isLogin,function (req, res) {
     var id = req.params.id;
     var comment = req.body.comment;
     Camp.findById(id, function (err, camp) {
@@ -30,7 +30,7 @@ route.post("/camps/:id", function (req, res) {
     });
 });
 
-route.get("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+route.get("/camps/:id/comment/:comment_id",[common.isLogin,common.isCommentAuthor], function (req, res) {
     Comment.findById(req.params.comment_id,function (err, comment) {
         if (err) {
             return res.redirect("back");
@@ -43,7 +43,7 @@ route.get("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req
     });
 });
 
-route.put("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+route.put("/camps/:id/comment/:comment_id",[common.isLogin,common.isCommentAuthor], function (req, res) {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, comment) {
         if (err) {
             return res.redirect("back");
@@ -53,7 +53,7 @@ route.put("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req
 });
 
 
-route.delete("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+route.delete("/camps/:id/comment/:comment_id",[common.isLogin,common.isCommentAuthor], function (req, res) {
     Comment.findByIdAndRemove(req.params.comment_id, req.body.comment, function (err, comment) {
         if (err) {
             return res.redirect("back");

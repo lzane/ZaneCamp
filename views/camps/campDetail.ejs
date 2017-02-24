@@ -26,7 +26,7 @@
                         <small class="text-muted">created by <%= camp.author.name %></small>
                     </p>
 
-                    <% if(camp.author.id.equals(locals.currentUser.id)){ %>
+                    <% if(locals.currentUser&&camp.author.id.equals(locals.currentUser.id)){ %>
                     <div class="float-xs-right pull-xs-12 camp-detail-updateRemove">
                         <a class="btn btn-primary btn-md" role="button" href="/camps/<%= camp._id %>/edit">Edit</a>
                         <form class="d-inline" action="/camps/<%= camp._id %>?_method=DELETE" method="POST">
@@ -38,6 +38,7 @@
             </div>
             <div class="card bg-faded">
                 <div class="comment-container">
+                    <% if(locals.currentUser){%>
                     <form action="/camps/<%= camp.id %>" method="post">
                         <h4 id="leave-a-comment-label">Leave a comment</h4>
 
@@ -51,6 +52,7 @@
                             </button>
                         </div>
                     </form>
+                    <%}%>
                     <div class="comment-group">
                         <% camp.comments.forEach(function (comment) { %>
                         <div class="comment">
@@ -60,7 +62,7 @@
                             <div class="comment-content">
                                 <%= comment.content %>
                             </div>
-                            <% if(comment.author.id.equals(locals.currentUser.id)){%>
+                            <% if(locals.currentUser&&comment.author.id.equals(locals.currentUser.id)){%>
                             <div class="text-xs-right">
                                 <form action="/camps/<%= camp.id %>/comment/<%= comment.id %>?_method=DELETE"
                                       method="POST">

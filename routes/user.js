@@ -23,6 +23,7 @@ route.post("/register", function (req, res) {
 });
 
 route.get("/login", function (req, res) {
+    req.session.redirectTo = req.get('referer');
     res.render("user/login");
 });
 
@@ -39,7 +40,9 @@ route.post("/login", function (req, res, next) {
             if (err) {
                 console.log(err);
             }
-            return res.redirect("/camps");
+            var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
+            delete req.session.redirectTo;
+            return res.redirect(redirectTo);
         });
     })(req, res, next);
 });

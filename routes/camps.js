@@ -23,7 +23,7 @@ route.get("/camps", function (req, res) {
     });
 });
 
-route.post("/camps", function (req, res) {
+route.post("/camps",common.isLogin, function (req, res) {
     var tempcamp = req.body.camp;
     tempcamp.author = {
         name: req.user.username,
@@ -40,7 +40,7 @@ route.post("/camps", function (req, res) {
 });
 
 
-route.get("/camps/new", function (req, res) {
+route.get("/camps/new",common.isLogin, function (req, res) {
     res.render("camps/createCamp");
 });
 
@@ -56,7 +56,7 @@ route.get("/camps/:id", function (req, res) {
 });
 
 
-route.get("/camps/:id/edit", common.isCampAuthor, function (req, res) {
+route.get("/camps/:id/edit", [common.isLogin,common.isCampAuthor], function (req, res) {
     var id = req.params.id;
     Camp.findById(id, function (err, foundCamp) {
         if (err) {
@@ -67,7 +67,7 @@ route.get("/camps/:id/edit", common.isCampAuthor, function (req, res) {
     });
 });
 
-route.put("/camps/:id", common.isCampAuthor, function (req, res) {
+route.put("/camps/:id", [common.isLogin,common.isCampAuthor], function (req, res) {
     var camp = req.body.camp;
     var id = req.params.id;
     Camp.findByIdAndUpdate(id, camp, function (err, updateCamp) {
@@ -79,7 +79,7 @@ route.put("/camps/:id", common.isCampAuthor, function (req, res) {
     })
 });
 
-route.delete("/camps/:id", common.isCampAuthor, function (req, res) {
+route.delete("/camps/:id", [common.isLogin,common.isCampAuthor], function (req, res) {
     var id = req.params.id;
     Camp.findById(id, function (err, camp) {
         if (err) {
