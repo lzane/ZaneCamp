@@ -1,7 +1,7 @@
 <% include ../partials/header.ejs %>
 
-<div class="container camp-detail-container" >
-    <div class="row" >
+<div class="container camp-detail-container">
+    <div class="row">
         <div id="left-menu" class="col-sm-12 col-md-3">
             <div class="camp-detail-left-menu">
                 <div class="list-group">
@@ -26,12 +26,14 @@
                         <small class="text-muted">created by <%= camp.author.name %></small>
                     </p>
 
+                    <% if(camp.author.id.equals(locals.currentUser.id)){ %>
                     <div class="float-xs-right pull-xs-12 camp-detail-updateRemove">
                         <a class="btn btn-primary btn-md" role="button" href="/camps/<%= camp._id %>/edit">Edit</a>
                         <form class="d-inline" action="/camps/<%= camp._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-danger btn-md" role="button" type="submit">Remove</button>
                         </form>
                     </div>
+                    <% } %>
                 </div>
             </div>
             <div class="card bg-faded">
@@ -48,20 +50,30 @@
                             <button class="btn btn-primary btn-lg btn-block" role="button" type="submit">Submit
                             </button>
                         </div>
-                        <div class="comment-group">
-                            <% camp.comments.forEach(function (comment) { %>
-                            <div class="comment">
-                                <div class="comment-name">
-                                    <b><%= comment.author.name %></b>
-                                </div>
-                                <div class="comment-content">
-                                    <%= comment.content %>
-                                </div>
-                                <hr class="comment-hr">
-                            </div>
-                            <% }) %>
-                        </div>
                     </form>
+                    <div class="comment-group">
+                        <% camp.comments.forEach(function (comment) { %>
+                        <div class="comment">
+                            <div class="comment-name">
+                                <b><%= comment.author.name %></b>
+                            </div>
+                            <div class="comment-content">
+                                <%= comment.content %>
+                            </div>
+                            <% if(comment.author.id.equals(locals.currentUser.id)){%>
+                            <div class="text-xs-right">
+                                <form action="/camps/<%= camp.id %>/comment/<%= comment.id %>?_method=DELETE"
+                                      method="POST">
+                                    <a href="/camps/<%= camp.id %>/comment/<%= comment.id %>">edit</a>
+                                    <button class="btn-link" type="submit">delete</button>
+                                </form>
+                            </div>
+                            <%}%>
+                            <hr class="comment-hr">
+                        </div>
+                        <% }) %>
+                    </div>
+
                 </div>
             </div>
         </div>

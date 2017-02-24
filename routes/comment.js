@@ -1,18 +1,8 @@
 var express = require('express');
 var route = express.Router(),
     Camp = require('../models/campModel'),
-    Comment = require('../models/commentModel');
-
-route.get("/camps/:id", function (req, res) {
-    var id = req.params.id;
-    Camp.findById(id).populate("comments").exec(function (err, foundCamp) {
-        if (err) {
-            res.send("can not find the camp");
-        } else {
-            res.render("camps/campDetail", {camp: foundCamp});
-        }
-    });
-});
+    Comment = require('../models/commentModel'),
+    common = require('../common');
 
 route.post("/camps/:id", function (req, res) {
     var id = req.params.id;
@@ -40,46 +30,37 @@ route.post("/camps/:id", function (req, res) {
     });
 });
 
-route.get("/camps/:id/edit", function (req, res) {
-    var id = req.params.id;
-    Camp.findById(id, function (err, foundCamp) {
+route.get("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+    Comment.findById(req.params.comment_id,function (err, comment) {
         if (err) {
-            res.send("can not find the camp");
-        } else {
-            res.render("camps/campEdit", {camp: foundCamp});
+            return res.redirect("back");
+        }
+        if (comment) {
+            res.render("camps/editComment",{camp_id: req.params.id , comment: comment});
+        }else{
+            return res.redirect("back");
         }
     });
 });
 
-route.put("/camps/:id", function (req, res) {
-    var camp = req.body.camp;
-    var id = req.params.id;
-    Camp.findByIdAndUpdate(id, camp, function (err, updateCamp) {
+route.put("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, comment) {
         if (err) {
-            res.send("can not update camp");
-        } else {
-            res.redirect("/camps/" + id);
+            return res.redirect("back");
         }
+        res.redirect("/camps/"+req.params.id);
     })
 });
 
-route.delete("/camps/:id", function (req, res) {
-    var id = req.params.id;
-    Camp.findById(id, function (err, camp) {
+
+route.delete("/camps/:id/comment/:comment_id",common.isCommentAuthor, function (req, res) {
+    Comment.findByIdAndRemove(req.params.comment_id, req.body.comment, function (err, comment) {
         if (err) {
-            res.send("can not delete camp");
-        } else {
-            camp.comments.forEach(function (commentID) {
-                Comment.findByIdAndRemove(commentID, function (err) {
-                    if (err) {
-                        res.send("can not delete comments");
-                    }
-                });
-            });
-            camp.remove();
-            res.redirect("/camps");
+            return res.redirect("back");
         }
+        res.redirect("/camps/"+req.params.id);
     })
 });
+
 
 module.exports = route;

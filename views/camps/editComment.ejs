@@ -1,0 +1,19 @@
+<% include ../partials/header.ejs %>
+
+<div class="container">
+    <form action="/camps/<%= camp_id %>/comment/<%= comment.id %>?_method=PUT" method="POST">
+        <h4 class="text-xs-center">update a comment</h4>
+        <div class="form-group">
+        <textarea class="form-control" name="comment[content]" rows="3"
+                  placeholder="Comment"><%=comment.content%></textarea>
+        </div>
+
+        <div class="text-xs-center">
+            <button class="btn btn-primary btn-lg btn-block" role="button" type="submit">Submit
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<% include ../partials/footer.ejs %>
